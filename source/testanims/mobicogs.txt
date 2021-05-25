@@ -1,0 +1,42 @@
+Short: FLC of Mobius strip of Cogs (Imagine 2.9)
+Type: gfx/anim
+Uploader: jay@tyrell.demon.co.uk (Jason Jack)
+Author: jay@tyrell.demon.co.uk (Jason Jack)
+              
+This is the FLC version of mobicogs.ham
+
+Try to imagine a Mobius strip made from 9 intermeshed cogs.  Now make the
+cogs turn each other, make them roll along the strip, and make the flex of
+the strip go around the other way.  
+
+Done in Imagine 2.9 mainly by using the Conform (Object|Group) to Path 
+alignment option in the action editor, plus a morphing double looping path, 
+and a morphing group of cogs.    
+
+The path with the twist has to have two loops otherwise the front (or back) 
+of the group 'falls off' the path.  Make it any size and then scale it in 
+the Stage until the head cog meets the tail cog.  I used an open path 
+because I wasn't sure what end behavior a closed path would have.
+
+The group of cogs was morphed by rotating all the odd cogs one way and all
+the even cogs the other way.  I used 0, 120, and 240 degrees as I don't
+trust 180 degrees.  Likewise for the path.
+
+Morphing cogs and path: I used States for one and traditional actor morphs
+for the other.  No reason - they are interchangeable in this case.
+                                   
+Thanks to: the IML, the metals texture, and Mr. Mobius.
+
+Format is 150 frames, FLC, 320x240.  Designed on the trusty A2000 and 
+rendered in about 2 hours on the DX66.  Uncompressed size 2812644 bytes.  
+Global brush map is a closeup of a piece of quartz.
+
+
+Enjoy,
+Jay
+
+
+mobicogs.flc may be freely distributed so long as this readme stays with it.  
+
+mobicogs.flc is Copyright (C) 1994 Jason Jack.  All rights reserved.
+May not be used commercially without the written consent of the author.

@@ -1,0 +1,24 @@
+; Datatype installer - Chris Young
+
+(welcome)
+
+(copyfiles
+	(prompt "Copying Datatype descriptor")
+	(help @copyfiles-help)
+	(source "data")
+	(dest "Devs:Datatypes")
+	(choices "FLIC")
+	(infos)
+	(noposition)
+)
+
+(copylib
+	(prompt "Copying datatype")
+	(help @copylib-help)
+	(source "data/flic.datatype")
+	(dest "SYS:Classes/Datatypes")
+)
+
+(run "adddatatypes refresh")
+
+(exit)

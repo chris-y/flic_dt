@@ -1,0 +1,3 @@
+; autoinstall for flic_dt
+copystore flic_dt/data/flic.datatype sys:classes/datatypes
+copy flic_dt/data/FLIC devs:datatypes

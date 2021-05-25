@@ -1,0 +1,70 @@
+Short:        Autodesk Animator FLI/FLC datatype
+Uploader:     chris@unsatisfactorysoftware.co.uk (Chris Young)
+Author:       chris@unsatisfactorysoftware.co.uk (Chris Young)
+Type:         util/dtype
+Version:      1.8
+URL:          http://www.unsatisfactorysoftware.co.uk/
+Architecture: ppc-amigaos >= 4.0.0
+
+This is a datatype for Autodesk Animator FLI/FLC files,
+collectively known as FLIC animations.
+
+There is a bit of optimisation still to do, but this is playing
+all my test files correctly without crashing.  Seeking
+through files sometimes causes it to go haywire, and
+occasionally will crash, so be careful with that!
+
+INSTALLATION
+============
+
+Double-click on Install and follow the prompts.
+If you prefer to o this manually, copy data/flic.datatype
+to sys:classes/datatypes, and data/FLIC to devs:datatypes
+
+History
+=======
+
+v1.8 (26.03.2009)
+* Changed to use old 32-bit API.  This fixes a bug causing the datatype
+  to crash on JXFS partitions.
+
+v1.7 (01.06.2008)
+First proper release
+* Fixed seeking some more, still get occasional problems when searching
+  forward/back in files using the gadgets in Multiview.
+* Colour palette now updates properly again for each frame.
+
+v1.6
+fixed seeking (maybe)
+
+v1.5
+Implemented caching, plays at good framerate now except when the framerate appears to be set wrong in the file
+
+v1.4
+was reading past the end of chunk 7 when packet type of 0 was present, fixed
+
+v1.3
+file pointer was in the wrong position after parsing some sub-chunks, still getting sme crashes which may be related (reading past the end of the chunk?)
+
+v1.2
+fixed chunk 7 so FLC now work, updated the descriptor so it would recognise them, some minor optimisations, palette changes mid-anim should now work.
+
+v1.1
+beta release, only FLI supported
+
+-------
+
+The icons are by Ken "Ken's Icons" Lester.
+
+As usual, I can and will not accept responsibility for any damage,
+loss of data etc incurred through use of this software.  This archive
+is provided "as-is" without warranty of any kind and all use is at
+your own risk.
+
+Please check the PGP signature in the Aminet readme against the
+archive to ensure it has not been tampered with.
+
+The primary download location for my software is Aminet (www.aminet.net)
+If you obtained this from elsewhere, please check Aminet, AmiUpdate
+(www.amiupdate.net) or http://www.unsatisfactorysoftware.co.uk for a newer
+version.

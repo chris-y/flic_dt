@@ -1,0 +1,7 @@
+stack 500000
+gcc -o flic.datatype init.c class.c -nostartfiles -O3 -funroll-loops -ffast-math -fomit-frame-pointer ;-mcpu=powerpc ;-ggdb -g ;-O3
+strip flic.datatype
+strip -R.comment flic.datatype
+copy flic.datatype sys:classes/datatypes/
+flush
+
