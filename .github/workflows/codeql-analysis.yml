@@ -66,8 +66,8 @@ jobs:
     #    uses a compiled language
 
     - run: |
-      cd source
-      make -f Makefile
+        cd source
+        make -f Makefile
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
