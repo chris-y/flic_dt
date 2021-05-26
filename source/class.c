@@ -783,12 +783,16 @@ static struct BitMap *GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	BPTR file = (BPTR)NULL;
 	struct BitMap *bm;
 
-//	filename = (char *)IUtility->GetTagData(DTA_Name, (uint32)"Untitled", tags);
+#ifndef __amigaos4__
+	filename = (char *)GetTagData(DTA_Name, (uint32)"Untitled", tags);
+#endif
 
 	GetDTAttrs(o,
 		DTA_Handle,			&file,
 		DTA_SourceType,		&srctype,
+#ifdef __amigaos4__
 		DTA_Name,			&filename,
+#endif
 		TAG_END);
 
 		SetDTAttrs(o, NULL, NULL,
