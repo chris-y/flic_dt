@@ -35,6 +35,12 @@ __attribute__((used))
 #endif
 verstag[] = VERSTAG;
 
+#ifdef __amigaos4__
+static BPTR libExpunge(struct LibraryManagerInterface *Self);
+#else
+BPTR libExpunge (REG(a6, struct ClassBase *libBase));
+#endif
+
 /*
  * The system (and compiler) rely on a symbol named _start which marks
  * the beginning of execution of an ELF file. To prevent others from 
