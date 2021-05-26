@@ -13,10 +13,22 @@
 #define RGB8to32(RGB) (((uint32)(RGB) << 24)|((uint32)(RGB) << 16)|((uint32)(RGB) << 8)|((uint32)(RGB)))
 
 
-uint32 ClassDispatch (Class *cl, Object *o, Msg msg);
+#ifdef __amigaos4__
+static uint32 ClassDispatch(Class *cl, Object *o, Msg msg);
+#else
+static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg msg));
+#endif
+static int32 WriteFLIC (Class *cl, Object *o, struct dtWrite *msg);
+static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf); //, uint32 index, uint32 *total);
+static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags);
+static struct BitMap *GetFrame(Class *, Object *, struct adtFrame *);
 
-Class *initDTClass (struct ClassBase *libBase) {
+Class *initDTClass (struct ClassBase *libBase)
+{
+#ifdef __amigaos4__
 	struct ExecIFace *IExec = libBase->IExec;
+	struct IntuitionIFace *IIntuition = libBase->IIntuition;
+#endif
 	Class *cl;
 	SuperClassLib = OpenLibrary("datatypes/animation.datatype", 44);
 	if (SuperClassLib) {
@@ -33,7 +45,10 @@ Class *initDTClass (struct ClassBase *libBase) {
 }
 
 BOOL freeDTClass (struct ClassBase *libBase, Class *cl) {
+#ifdef __amigaos4__
 	struct ExecIFace *IExec = libBase->IExec;
+	struct IntuitionIFace *IIntuition = libBase->IIntuition;
+#endif
 	BOOL res = TRUE;
 	if (cl) {
 		res = FreeClass(cl);
@@ -44,14 +59,19 @@ BOOL freeDTClass (struct ClassBase *libBase, Class *cl) {
 	return res;
 }
 
-static int32 WriteFLIC (Class *cl, Object *o, struct dtWrite *msg);
-static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf); //, uint32 index, uint32 *total);
-static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags);
-static struct BitMap *GetFrame(Class *, Object *, struct adtFrame *);
 
-uint32 ClassDispatch (Class *cl, Object *o, Msg msg) {
+
+#ifdef __amigaos4__
+static uint32 ClassDispatch(Class *cl, Object *o, Msg msg)
+#else
+static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg msg))
+#endif
+{
 	struct ClassBase *libBase = (struct ClassBase *)cl->cl_UserData;
-
+#ifdef __amigaos4__
+	struct DOSIFace *IDOS = libBase->IDOS;
+	struct IntuitionIFace *IIntuition = libBase->IIntuition;
+#endif
 	uint32 ret;
 
 	switch (msg->MethodID) {
@@ -130,7 +150,11 @@ static int32 WriteFLIC (Class *cl, Object *o, struct dtWrite *msg) {
 static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 {
 	struct ClassBase *libBase = (struct ClassBase *)cl->cl_UserData;
+#ifdef __amigaos4__
 	struct ExecIFace *IExec = libBase->IExec;
+	struct GraphicsIFace *IGraphics = libBase->IGraphics;
+	struct DOSIFace *IDOS = libBase->IDOS;
+#endif
 	int error = 0;
 	struct BitMap *bm,*tempbm;
 	struct flcheader head;
@@ -745,6 +769,10 @@ static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 
 static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	struct ClassBase *libBase = (struct ClassBase *)cl->cl_UserData;
+#ifdef __amigaos4__
+	struct UtilityIFace *IUtility = libBase->IUtility;
+	struct DataTypesIFace *IDataTypes = libBase->IDataTypes;
+#endif
 	struct BitMapHeader *bmh = NULL;
 	char *filename;
 	int32 srctype;
