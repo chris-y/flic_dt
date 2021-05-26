@@ -1,10 +1,10 @@
 /*
- * ico.datatype
- * (c) Fredrik Wikstrom
+ * flic.datatype
+ * (c) Chris Young
  */
 
-#ifndef ICO_CLASS_H
-#define ICO_CLASS_H
+#ifndef FLIC_CLASS_H
+#define FLIC_CLASS_H
 
 #include "endian.h"
 #include <exec/exec.h>
@@ -19,12 +19,20 @@
 #include <proto/datatypes.h>
 #include <proto/graphics.h>
 
+#ifndef __amigaos4__
+#include "SDI_compiler.h"
+#include <stdint.h>
+#define uint16 uint16_t
+#define int32 int32_t
+#define uint32 uint32_t
+#endif
+
 struct ClassBase {
 	struct Library	libNode;
 	uint16			Pad;
 	Class			*DTClass;
 	BPTR			SegList;
-
+#ifdef __amigaos4__
 	struct ExecIFace		*IExec;
 	struct DOSIFace			*IDOS;
 	struct IntuitionIFace	*IIntuition;
@@ -39,9 +47,11 @@ struct ClassBase {
 	struct Library	*DataTypesLib;
 	struct Library	*GraphicsLib;
 	struct Library  *NewlibLib;
+#endif
 	struct Library	*SuperClassLib;
 };
 
+#ifdef __amigaos4__
 #define DOSLib			libBase->DOSLib
 #define IntuitionLib	libBase->IntuitionLib
 #define UtilityLib		libBase->UtilityLib
@@ -57,6 +67,16 @@ struct ClassBase {
 #define IDataTypes	libBase->IDataTypes
 #define IGraphics	libBase->IGraphics
 //#define INewlib     libBase->INewlib
+#else
+extern struct ExecBase *SysBase;
+extern struct Library *DOSBase;
+extern struct Library *UtilityBase;
+extern struct Library *IntuitionBase;
+extern struct Library *DataTypesBase;
+extern struct Library *GfxBase;
+#endif
+
+
 
 Class *initDTClass (struct ClassBase *libBase);
 BOOL freeDTClass (struct ClassBase *libBase, Class *cl);
@@ -113,4 +133,4 @@ struct flicinstdata
 	uint32 nextchunk;
 };
 
-#endif /* ICO_CLASS_H */
+#endif /* FLIC_CLASS_H */
