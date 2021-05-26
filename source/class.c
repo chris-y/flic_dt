@@ -332,7 +332,7 @@ static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 
 						if(adf)
 						{
-							if(!clrmap) clrmap=IGraphics->GetColorMap(256);
+							if(!clrmap) clrmap=GetColorMap(256);
 						}
 						else
 						{
@@ -657,7 +657,7 @@ static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 				if(GetFilePosition(file) != (filepos+filepos2))
 				{
 #ifdef __amigaos4__
-					DebugPrintF("[flic.datatype] WARNING: File position mismatch (%lld should be %lld after chunk %ld)\n",IDOS->GetFilePosition(file),filepos+filepos2,read_le16(&datachunk.type));
+					DebugPrintF("[flic.datatype] WARNING: File position mismatch (%lld should be %lld after chunk %ld)\n",GetFilePosition(file),filepos+filepos2,read_le16(&datachunk.type));
 #endif
 					Seek(file,filepos+filepos2,OFFSET_BEGINNING);
 				}
