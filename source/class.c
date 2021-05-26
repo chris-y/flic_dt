@@ -64,7 +64,7 @@ uint32 ClassDispatch (Class *cl, Object *o, Msg msg) {
 				if (error != OK) {
 					ICoerceMethod(cl, (Object *)ret, OM_DISPOSE);
 					ret = (uint32)NULL;
-					IDOS->SetIoErr(error);
+					SetIoErr(error);
 				}
 			}
 			break;
