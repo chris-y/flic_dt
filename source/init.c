@@ -77,7 +77,7 @@ struct ClassBase *libOpen(REG(a6, struct ClassBase *libBase), REG(d0, uint32 ver
 
     /* Add up the open count */
     libBase->libNode.lib_OpenCnt++;
-    return (struct Library *)libBase;
+    return libBase;
 
 }
 
@@ -126,13 +126,10 @@ BPTR libExpunge (REG(a6, struct ClassBase *libBase))
 {
 #ifdef __amigaos4__
     struct ClassBase *libBase = (struct ClassBase *)Self->Data.LibBase;
+    struct ExecIFace *IExec = libBase->IExec;
 #endif
     /* If your library cannot be expunged, return 0 */
     BPTR result = (BPTR)NULL;
-    struct ClassBase *libBase = (struct ClassBase *)Self->Data.LibBase;
-#ifdef __amigaos4__
-    struct ExecIFace *IExec = libBase->IExec;
-#endif
 
     if (libBase->libNode.lib_OpenCnt == 0)
     {
@@ -142,7 +139,7 @@ BPTR libExpunge (REG(a6, struct ClassBase *libBase))
 
 		closeDTLibs(libBase);
 
-        IExec->Remove(&libBase->libNode.lib_Node);
+        Remove(&libBase->libNode.lib_Node);
 #ifdef __amigaos4__
         DeleteLibrary(&libBase->libNode);
 #else
@@ -188,7 +185,7 @@ struct ClassBase *libInit (REG(d0, struct ClassBase *libBase), REG(a0, BPTR segl
 	if (openDTLibs(libBase)) {
 		libBase->DTClass = initDTClass(libBase);
 		if (libBase->DTClass) {
-			return (struct Library *)libBase;
+			return libBase;
 		}
 		closeDTLibs(libBase);
 	}
@@ -233,7 +230,7 @@ static int openDTLibs (struct ClassBase *libBase) {
 
 	NewlibLib = OpenLibrary("newlib.library", 52);
 	if (!NewlibLib) return FALSE;
-	INewlib = (struct NewlibIFace *)GetInterface(NewlibLib, "main", 1, NULL);
+	INewlib = GetInterface(NewlibLib, "main", 1, NULL);
 	if (!INewlib) return FALSE;
 
 	return TRUE;
