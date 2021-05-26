@@ -15,8 +15,8 @@ jobs:
       - name: build_os4
         id: build_os4
         run: |
-        cd source
-        make -f Makefile
+          cd source
+          make -f Makefile
       - uses: actions/upload-artifact@v1
         with:
           name: flic.datatype-OS4
@@ -30,7 +30,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: build_os3
         id: build_os3
-        run: make -f Makefile.OS3
+        run: |
+          cd source
+          make -f Makefile.OS3
       - uses: actions/upload-artifact@v1
         with:
           name: flic.datatype-OS3
