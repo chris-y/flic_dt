@@ -300,7 +300,7 @@ static int32 ConvertICO (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 		if(read_le16(&chunk.chunks))
 		{
 			uint32 size2;
-			uint16 i;
+			int i;
 
 			for(i=0;i<read_le16(&chunk.chunks);i++)
 			{
