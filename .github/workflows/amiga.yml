@@ -34,7 +34,7 @@ jobs:
         id: build_os3
         run: |
             cd source
-            make -f Makefile
+            make -f Makefile.OS3-gcc
       - uses: actions/upload-artifact@v1
         with:
           name: flic.datatype-OS3
