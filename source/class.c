@@ -1,5 +1,5 @@
 /*
- * pnm.datatype - Chris Young
+ * flic.datatype - Chris Young
  */
 
 #include "class.h"
@@ -686,13 +686,13 @@ static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 //						IDOS->ChangeFilePosition(file,size2,OFFSET_CURRENT);
 					break;
 				}
+#ifdef __amigaos4__
 				if(GetFilePosition(file) != (filepos+filepos2))
 				{
-#ifdef __amigaos4__
 					DebugPrintF("[flic.datatype] WARNING: File position mismatch (%lld should be %lld after chunk %ld)\n",GetFilePosition(file),filepos+filepos2,read_le16(&datachunk.type));
-#endif
 					Seek(file,filepos+filepos2,OFFSET_BEGINNING);
 				}
+#endif
 			}
 		}
 		size = read_le32(&chunk.size); // - sizeof(struct flcchunk);
