@@ -69,6 +69,7 @@ static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg 
 {
 	struct ClassBase *libBase = (struct ClassBase *)cl->cl_UserData;
 #ifdef __amigaos4__
+	struct ExecIFace *IExec = libBase->IExec;
 	struct GraphicsIFace *IGraphics = libBase->IGraphics;
 	struct DOSIFace *IDOS = libBase->IDOS;
 	struct IntuitionIFace *IIntuition = libBase->IIntuition;
