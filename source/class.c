@@ -19,7 +19,7 @@ static uint32 ClassDispatch(Class *cl, Object *o, Msg msg);
 static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg msg));
 #endif
 static int32 WriteFLIC (Class *cl, Object *o, struct dtWrite *msg);
-static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf); //, uint32 index, uint32 *total);
+static struct BitMap *ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf); //, uint32 index, uint32 *total);
 static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags);
 static struct BitMap *GetFrame(Class *, Object *, struct adtFrame *);
 
@@ -92,7 +92,7 @@ static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg 
 			break;
 
 			case ADTM_LOADFRAME:
-				ret = GetFrame(cl, o, (struct adtFrame *)msg);
+				ret = (uint32)GetFrame(cl, o, (struct adtFrame *)msg);
 				if(!ret) SetIoErr(DTERROR_INVALID_DATA);
 			break;
 
@@ -149,7 +149,7 @@ static int32 WriteFLIC (Class *cl, Object *o, struct dtWrite *msg) {
 	return ERROR_NOT_IMPLEMENTED;
 }
 
-static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
+static struct BitMap *ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 {
 	struct ClassBase *libBase = (struct ClassBase *)cl->cl_UserData;
 #ifdef __amigaos4__
@@ -728,7 +728,7 @@ static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
                 ADTA_KeyFrame,                                     bm,
 				TAG_END);
 
-		return error;
+		return (struct BitMap *)error;
 	}
 	else
 	{
@@ -798,7 +798,7 @@ static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	/* Do we have everything we need? */
 	if (file && srctype == DTST_FILE) {
 
-		error = ConvertFLIC(cl, o, file,NULL); //, whichpic, numpics);
+		error = (int32)ConvertFLIC(cl, o, file,NULL); //, whichpic, numpics);
 	}
 
 	return error;

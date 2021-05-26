@@ -60,16 +60,6 @@ int32 _start(void)
     return 100;
 }
 
-#ifndef __amigaos4__
-struct ClassBase *libInit (REG(d0, struct ClassBase *libBase), REG(a0, BPTR seglist),
-	REG(a6, struct ExecBase *exec));
-struct ClassBase *libOpen (REG(a6, struct ClassBase *libBase), REG(d0, uint32 version));
-BPTR libClose (REG(a6, struct ClassBase *libBase));
-BPTR libExpunge (REG(a6, struct ClassBase *libBase));
-APTR libReserved (REG(a6, struct ClassBase *libBase));
-Class *_DTClass_ObtainEngine(REG(a6, struct ClassBase *libBase));
-#endif
-
 /* Open the library */
 #ifdef __amigaos4__
 static struct ClassBase *libOpen(struct LibraryManagerInterface *Self, ULONG version)
