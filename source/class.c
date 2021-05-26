@@ -30,7 +30,7 @@ Class *initDTClass (struct ClassBase *libBase)
 	struct IntuitionIFace *IIntuition = libBase->IIntuition;
 #endif
 	Class *cl;
-	libBase->SuperClassLib = OpenLibrary("datatypes/animation.datatype", 44);
+	libBase->SuperClassLib = OpenLibrary("datatypes/animation.datatype", 39);
 	if (libBase->SuperClassLib) {
 		cl = MakeClass(libBase->libNode.lib_Node.ln_Name, ANIMATIONDTCLASS, NULL, sizeof(struct flicinstdata), 0);
 		if (cl) {
