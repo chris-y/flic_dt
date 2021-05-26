@@ -29,7 +29,7 @@ struct Library *GfxBase;
 #include "flic.datatype_rev.h"
 #define LIBNAME "flic.datatype"
 
-STATIC CONST UBYTE UNUSED verstag[] = VERSTAG;
+CONST UBYTE UNUSED verstag[] = VERSTAG;
 
 #ifdef __amigaos4__
 static BPTR libExpunge(struct LibraryManagerInterface *Self);
@@ -399,7 +399,7 @@ const struct InitTable init_table = {
 #endif
 
 /* ------------------- ROM Tag ------------------------ */
-STATIC CONST struct Resident lib_res UNUSED = {
+CONST struct Resident lib_res UNUSED = {
     RTC_MATCHWORD,
     (struct Resident *)&lib_res,
     (APTR)(&lib_res + 1),
