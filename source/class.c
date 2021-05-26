@@ -85,14 +85,20 @@ static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg 
 				if (error != OK) {
 					ICoerceMethod(cl, (Object *)ret, OM_DISPOSE);
 					ret = (uint32)NULL;
+#ifndef __amigaos4__
+// temp commented out
 					SetIoErr(error);
+#endif
 				}
 			}
 			break;
 
 			case ADTM_LOADFRAME:
 				ret = GetFrame(cl, o, (struct adtFrame *)msg);
+#ifndef __amigaos4__
+// temp commented out
 				if(!ret) SetIoErr(DTERROR_INVALID_DATA);
+#endif
 			break;
 
 			case ADTM_UNLOADFRAME:
