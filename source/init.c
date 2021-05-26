@@ -209,34 +209,34 @@ struct ClassBase *libInit (REG(d0, struct ClassBase *libBase), REG(a0, BPTR segl
 static int openDTLibs (struct ClassBase *libBase) {
 #ifdef __amigaos4__
 	struct ExecIFace *IExec = libBase->IExec;
-	DOSLib = OpenLibrary("dos.library", 52);
-	if (!DOSLib) return FALSE;
-	IDOS = (struct DOSIFace *)GetInterface(DOSLib, "main", 1, NULL);
-	if (!IDOS) return FALSE;
+	libBase->DOSLib = OpenLibrary("dos.library", 52);
+	if (!libBase->DOSLib) return FALSE;
+	libBase->IDOS = (struct DOSIFace *)GetInterface(libBase->DOSLib, "main", 1, NULL);
+	if (!libBase->IDOS) return FALSE;
 
-	IntuitionLib = OpenLibrary("intuition.library", 52);
-	if (!IntuitionLib) return FALSE;
-	IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionLib, "main", 1, NULL);
-	if (!IIntuition) return FALSE;
+	libBase->IntuitionLib = OpenLibrary("intuition.library", 52);
+	if (!libBase->IntuitionLib) return FALSE;
+	libBase->IIntuition = (struct IntuitionIFace *)GetInterface(libBase->IntuitionLib, "main", 1, NULL);
+	if (!libBase->IIntuition) return FALSE;
 
-	UtilityLib = OpenLibrary("utility.library", 52);
-	if (!UtilityLib) return FALSE;
-	IUtility = (struct UtilityIFace *)GetInterface(UtilityLib, "main", 1, NULL);
-	if (!IUtility) return FALSE;
+	libBase->UtilityLib = OpenLibrary("utility.library", 52);
+	if (!libBase->UtilityLib) return FALSE;
+	libBase->IUtility = (struct UtilityIFace *)GetInterface(libBase->UtilityLib, "main", 1, NULL);
+	if (!libBase->IUtility) return FALSE;
 
-	DataTypesLib = OpenLibrary("datatypes.library", 52);
-	if (!DataTypesLib) return FALSE;
-	IDataTypes = (struct DataTypesIFace *)GetInterface(DataTypesLib, "main", 1, NULL);
-	if (!IDataTypes) return FALSE;
+	libBase->DataTypesLib = OpenLibrary("datatypes.library", 52);
+	if (!libBase->DataTypesLib) return FALSE;
+	libBase->IDataTypes = (struct DataTypesIFace *)GetInterface(libBase->DataTypesLib, "main", 1, NULL);
+	if (!libBase->IDataTypes) return FALSE;
 
-	GraphicsLib = OpenLibrary("graphics.library", 52);
-	if (!GraphicsLib) return FALSE;
-	IGraphics = (struct GraphicsIFace *)GetInterface(GraphicsLib, "main", 1, NULL);
-	if (!IGraphics) return FALSE;
+	libBase->GraphicsLib = OpenLibrary("graphics.library", 52);
+	if (!libBase->GraphicsLib) return FALSE;
+	libBase->IGraphics = (struct GraphicsIFace *)GetInterface(libBase->GraphicsLib, "main", 1, NULL);
+	if (!libBase->IGraphics) return FALSE;
 
-	NewlibLib = OpenLibrary("newlib.library", 52);
-	if (!NewlibLib) return FALSE;
-	INewlib = GetInterface(NewlibLib, "main", 1, NULL);
+	libBase->NewlibLib = OpenLibrary("newlib.library", 52);
+	if (!libBase->NewlibLib) return FALSE;
+	INewlib = GetInterface(libBase->NewlibLib, "main", 1, NULL);
 	if (!INewlib) return FALSE;
 
 	return TRUE;
@@ -257,23 +257,23 @@ static int openDTLibs (struct ClassBase *libBase) {
 static void closeDTLibs (struct ClassBase *libBase) {
 #ifdef __amigaos4__
 	struct ExecIFace *IExec = libBase->IExec;
-	DropInterface((struct Interface *)IGraphics);
-	CloseLibrary(GraphicsLib);
+	DropInterface((struct Interface *)libBase->IGraphics);
+	CloseLibrary(libBase->GraphicsLib);
 
-	DropInterface((struct Interface *)IDataTypes);
-	CloseLibrary(DataTypesLib);
+	DropInterface((struct Interface *)libBase->IDataTypes);
+	CloseLibrary(libBase->DataTypesLib);
 
-	DropInterface((struct Interface *)IUtility);
-	CloseLibrary(UtilityLib);
+	DropInterface((struct Interface *)libBase->IUtility);
+	CloseLibrary(libBase->UtilityLib);
 
-	DropInterface((struct Interface *)IIntuition);
-	CloseLibrary(IntuitionLib);
+	DropInterface((struct Interface *)libBase->IIntuition);
+	CloseLibrary(libBase->IntuitionLib);
 
-	DropInterface((struct Interface *)IDOS);
-	CloseLibrary(DOSLib);
+	DropInterface((struct Interface *)libBase->IDOS);
+	CloseLibrary(libBase->DOSLib);
 
 	DropInterface((struct Interface *)INewlib);
-	CloseLibrary(NewlibLib);
+	CloseLibrary(libBase->NewlibLib);
 #else
 	CloseLibrary(DataTypesBase);
 	CloseLibrary(UtilityBase);
