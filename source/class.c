@@ -30,15 +30,15 @@ Class *initDTClass (struct ClassBase *libBase)
 	struct IntuitionIFace *IIntuition = libBase->IIntuition;
 #endif
 	Class *cl;
-	SuperClassLib = OpenLibrary("datatypes/animation.datatype", 44);
-	if (SuperClassLib) {
+	libBase->SuperClassLib = OpenLibrary("datatypes/animation.datatype", 44);
+	if (libBase->SuperClassLib) {
 		cl = MakeClass(libBase->libNode.lib_Node.ln_Name, ANIMATIONDTCLASS, NULL, sizeof(struct flicinstdata), 0);
 		if (cl) {
 			cl->cl_Dispatcher.h_Entry = (HOOKFUNC)ClassDispatch;
 			cl->cl_UserData = (uint32)libBase;
 			AddClass(cl);
 		} else {
-			CloseLibrary(SuperClassLib);
+			CloseLibrary(libBase->SuperClassLib);
 		}
 	}
 	return cl;
@@ -53,7 +53,7 @@ BOOL freeDTClass (struct ClassBase *libBase, Class *cl) {
 	if (cl) {
 		res = FreeClass(cl);
 		if (res) {
-			CloseLibrary(SuperClassLib);
+			CloseLibrary(libBase->SuperClassLib);
 		}
 	}
 	return res;
