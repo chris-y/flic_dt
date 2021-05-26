@@ -51,7 +51,7 @@ struct ClassBase {
 	struct Library	*SuperClassLib;
 };
 
-#ifdef __amigaos4__
+#if 0
 #define DOSLib			libBase->DOSLib
 #define IntuitionLib	libBase->IntuitionLib
 #define UtilityLib		libBase->UtilityLib
@@ -67,7 +67,9 @@ struct ClassBase {
 #define IDataTypes	libBase->IDataTypes
 #define IGraphics	libBase->IGraphics
 //#define INewlib     libBase->INewlib
-#else
+#endif
+
+#ifndef __amigaos4__
 extern struct ExecBase *SysBase;
 extern struct Library *DOSBase;
 extern struct Library *UtilityBase;
