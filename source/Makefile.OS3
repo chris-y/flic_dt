@@ -1,0 +1,34 @@
+MAKE := make
+CC   := vc +aos68k -c99
+CP  := copy
+RM   := rm -f
+
+CFLAGS := -O3 -cpu=68020 -Iinclude -Ivincludeos3: -D__NOLIBBASE__
+# -gstabs
+LINK := -nostdlib
+
+# Additional linker libraries
+LIBS := -lamiga
+
+# Name of the "thing" to build
+TARGET  := flic.datatype
+VERSION := 1
+
+OBJS := init.o class.o
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(LINK) -o $@ $^ $(LIBS)
+
+.PHONY: install clean revision
+
+install: $(TARGET)
+	$(CP) $(TARGET) SYS:Classes/DataTypes/
+
+clean:
+	$(RM) $(TARGET) $(OBJS)
+
+revision:
+	bumprev $(VERSION) $(TARGET)
+
