@@ -6,18 +6,18 @@
 #ifndef FLIC_CLASS_H
 #define FLIC_CLASS_H
 
-#include "endian.h"
-#include <exec/exec.h>
-#include <dos/dos.h>
-#include <utility/utility.h>
-#include <datatypes/animationclass.h>
-
 #include <proto/exec.h>
 #include <proto/dos.h>
 #include <proto/intuition.h>
 #include <proto/utility.h>
 #include <proto/datatypes.h>
 #include <proto/graphics.h>
+
+#include "endian.h"
+#include <exec/exec.h>
+#include <dos/dos.h>
+#include <utility/utility.h>
+#include <datatypes/animationclass.h>
 
 #ifndef __amigaos4__
 #include "SDI_compiler.h"
@@ -64,7 +64,6 @@ struct ClassBase {
 #define NewlibLib       libBase->NewlibLib
 
 //#define IExec		libBase->IExec
-#define IDOS		libBase->IDOS
 #define IIntuition	libBase->IIntuition
 #define IUtility	libBase->IUtility
 #define IDataTypes	libBase->IDataTypes
@@ -79,6 +78,8 @@ extern struct Library *UtilityBase;
 extern struct Library *IntuitionBase;
 extern struct Library *DataTypesBase;
 extern struct Library *GfxBase;
+#else
+#define IDOS		libBase->IDOS
 #endif
 
 
