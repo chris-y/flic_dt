@@ -13,7 +13,6 @@
 #include <proto/datatypes.h>
 #include <proto/graphics.h>
 
-#include "endian.h"
 #include <exec/exec.h>
 #include <dos/dos.h>
 #include <utility/utility.h>
@@ -29,6 +28,8 @@
 #define int8 int8_t
 #define int16 int16_t
 #endif
+
+#include "endian.h"
 
 struct ClassBase {
 	struct Library	libNode;

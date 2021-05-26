@@ -20,7 +20,7 @@ static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg 
 #endif
 static int32 WriteFLIC (Class *cl, Object *o, struct dtWrite *msg);
 static struct BitMap *ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf); //, uint32 index, uint32 *total);
-static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags);
+static struct BitMap *GetFLIC (Class *cl, Object *o, struct TagItem *tags);
 static struct BitMap *GetFrame(Class *, Object *, struct adtFrame *);
 
 Class *initDTClass (struct ClassBase *libBase)
@@ -82,7 +82,7 @@ static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg 
 			ret = IDoSuperMethodA(cl, o, msg);
 			if (ret) {
 				int32 error;
-				error = GetFLIC(cl, (Object *)ret, ((struct opSet *)msg)->ops_AttrList);
+				error = (int32)GetFLIC(cl, (Object *)ret, ((struct opSet *)msg)->ops_AttrList);
 				if (error != OK) {
 					ICoerceMethod(cl, (Object *)ret, OM_DISPOSE);
 					ret = (uint32)NULL;
@@ -770,7 +770,7 @@ static struct BitMap *ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFra
 	}
 }
 
-static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
+static struct BitMap *GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	struct ClassBase *libBase = (struct ClassBase *)cl->cl_UserData;
 #ifdef __amigaos4__
 	struct UtilityIFace *IUtility = libBase->IUtility;
@@ -779,7 +779,7 @@ static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	struct BitMapHeader *bmh = NULL;
 	char *filename;
 	int32 srctype;
-	int32 error = 0; //ERROR_OBJECT_NOT_FOUND;
+	struct BitMap *error = NULL; //ERROR_OBJECT_NOT_FOUND;
 	BPTR file = (BPTR)NULL;
 	struct BitMap *bm;
 
@@ -798,7 +798,7 @@ static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	/* Do we have everything we need? */
 	if (file && srctype == DTST_FILE) {
 
-		error = (int32)ConvertFLIC(cl, o, file,NULL); //, whichpic, numpics);
+		error = ConvertFLIC(cl, o, file,NULL); //, whichpic, numpics);
 	}
 
 	return error;
