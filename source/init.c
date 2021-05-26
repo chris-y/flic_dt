@@ -211,8 +211,8 @@ static int openDTLibs (struct ClassBase *libBase) {
 	struct ExecIFace *IExec = libBase->IExec;
 	libBase->DOSLib = OpenLibrary("dos.library", 52);
 	if (!libBase->DOSLib) return FALSE;
-	libBase->IDOS = (struct DOSIFace *)GetInterface(libBase->DOSLib, "main", 1, NULL);
-	if (!libBase->IDOS) return FALSE;
+	IDOS = (struct DOSIFace *)GetInterface(libBase->DOSLib, "main", 1, NULL);
+	if (!IDOS) return FALSE;
 
 	libBase->IntuitionLib = OpenLibrary("intuition.library", 52);
 	if (!libBase->IntuitionLib) return FALSE;
@@ -269,7 +269,7 @@ static void closeDTLibs (struct ClassBase *libBase) {
 	DropInterface((struct Interface *)libBase->IIntuition);
 	CloseLibrary(libBase->IntuitionLib);
 
-	DropInterface((struct Interface *)libBase->IDOS);
+	DropInterface((struct Interface *)IDOS);
 	CloseLibrary(libBase->DOSLib);
 
 	DropInterface((struct Interface *)INewlib);
