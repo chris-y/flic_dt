@@ -29,6 +29,8 @@ struct Library *GfxBase;
 #include "flic.datatype_rev.h"
 #define LIBNAME "flic.datatype"
 
+int32 _start(void);
+
 STATIC CONST UBYTE
 #ifdef __GNUC__
 __attribute__((used))
@@ -52,7 +54,6 @@ BPTR libExpunge (REG(a6, struct ClassBase *libBase));
  * rts
  *
  */
-int32 _start(void);
 
 int32 _start(void)
 {
