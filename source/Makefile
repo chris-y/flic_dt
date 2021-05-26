@@ -3,7 +3,7 @@ CC   := gcc
 CP  := copy
 RM   := rm -f
 
-CFLAGS := -O3 -funroll-loops -ffast-math -fomit-frame-pointer
+CFLAGS := -O3 -funroll-loops -ffast-math -fomit-frame-pointer -D__USE_INLINE__
 # -gstabs
 LINK := -nostartfiles
 
