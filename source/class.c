@@ -766,7 +766,7 @@ static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 			SetRGB32CM(prevframe->cmap,i/3,table[i],table[i+1],table[i+2]);
 		}
 
-		return (int32)bm; /* should we be returning bm here?? */
+		return (int32)bm; /* this is called from getframe so returns a bitmap for some reason */
 	}
 }
 
