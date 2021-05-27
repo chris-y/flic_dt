@@ -813,7 +813,6 @@ static int32 GetFrame (Class *cl, Object *o, struct adtFrame *adf) {
 	int32 srctype;
 	int32 error = 0; //ERROR_OBJECT_NOT_FOUND;
 	BPTR file = (BPTR)NULL;
-	int32 error;
 
 /*
 	IDataTypes->GetDTAttrs(o,
