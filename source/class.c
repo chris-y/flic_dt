@@ -19,9 +19,9 @@ static uint32 ClassDispatch(Class *cl, Object *o, Msg msg);
 static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg msg));
 #endif
 static int32 WriteFLIC (Class *cl, Object *o, struct dtWrite *msg);
-static struct BitMap *ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf); //, uint32 index, uint32 *total);
-static struct BitMap *GetFLIC (Class *cl, Object *o, struct TagItem *tags);
-static struct BitMap *GetFrame(Class *, Object *, struct adtFrame *);
+static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf); //, uint32 index, uint32 *total);
+static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags);
+static int32 GetFrame(Class *, Object *, struct adtFrame *);
 
 Class *initDTClass (struct ClassBase *libBase)
 {
@@ -82,7 +82,7 @@ static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg 
 			ret = IDoSuperMethodA(cl, o, msg);
 			if (ret) {
 				int32 error;
-				error = (int32)GetFLIC(cl, (Object *)ret, ((struct opSet *)msg)->ops_AttrList);
+				error = GetFLIC(cl, (Object *)ret, ((struct opSet *)msg)->ops_AttrList);
 				if (error != OK) {
 					ICoerceMethod(cl, (Object *)ret, OM_DISPOSE);
 					ret = (uint32)NULL;
@@ -149,7 +149,7 @@ static int32 WriteFLIC (Class *cl, Object *o, struct dtWrite *msg) {
 	return ERROR_NOT_IMPLEMENTED;
 }
 
-static struct BitMap *ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
+static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 {
 	struct ClassBase *libBase = (struct ClassBase *)cl->cl_UserData;
 #ifdef __amigaos4__
@@ -158,7 +158,7 @@ static struct BitMap *ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFra
 //	struct DOSIFace *IDOS = libBase->IDOS;
 	struct DataTypesIFace *IDataTypes = libBase->IDataTypes;
 #endif
-	int error = 0;
+	int32 error = 0;
 	struct BitMap *bm,*tempbm;
 	struct flcheader head;
 	struct flcchunk chunk;
@@ -728,7 +728,7 @@ static struct BitMap *ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFra
                 ADTA_KeyFrame,                                     bm,
 				TAG_END);
 
-		return (struct BitMap *)error;
+		return error;
 	}
 	else
 	{
@@ -766,11 +766,11 @@ static struct BitMap *ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFra
 			SetRGB32CM(prevframe->cmap,i/3,table[i],table[i+1],table[i+2]);
 		}
 
-		return bm;
+		return (int32)bm; /* should we be returning bm here?? */
 	}
 }
 
-static struct BitMap *GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
+static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	struct ClassBase *libBase = (struct ClassBase *)cl->cl_UserData;
 #ifdef __amigaos4__
 	struct UtilityIFace *IUtility = libBase->IUtility;
@@ -779,9 +779,8 @@ static struct BitMap *GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	struct BitMapHeader *bmh = NULL;
 	char *filename;
 	int32 srctype;
-	struct BitMap *error = NULL; //ERROR_OBJECT_NOT_FOUND;
-	BPTR file = (BPTR)NULL;
-	struct BitMap *bm;
+	int32 error = 0; //ERROR_OBJECT_NOT_FOUND;
+	BPTR file = (BPTR)0;
 
 #ifndef __amigaos4__
 	filename = (char *)GetTagData(DTA_Name, (uint32)"Untitled", tags);
@@ -808,13 +807,13 @@ static struct BitMap *GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	return error;
 }
 
-static struct BitMap *GetFrame (Class *cl, Object *o, struct adtFrame *adf) {
+static int32 GetFrame (Class *cl, Object *o, struct adtFrame *adf) {
 	struct ClassBase *libBase = (struct ClassBase *)cl->cl_UserData;
 	char *filename;
 	int32 srctype;
 	int32 error = 0; //ERROR_OBJECT_NOT_FOUND;
 	BPTR file = (BPTR)NULL;
-	struct BitMap *bm;
+	int32 error;
 
 /*
 	IDataTypes->GetDTAttrs(o,
@@ -824,8 +823,8 @@ static struct BitMap *GetFrame (Class *cl, Object *o, struct adtFrame *adf) {
 
 	/* Do we have everything we need? */
 //	if (file && srctype == DTST_FILE) {
-		bm = ConvertFLIC(cl, o, 0,adf); //, whichpic, numpics);
+		error = ConvertFLIC(cl, o, 0,adf); //, whichpic, numpics);
 //	}
 
-	return bm;
+	return error;
 }
