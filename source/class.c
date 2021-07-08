@@ -91,7 +91,7 @@ static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg 
 	uint32 ret;
 
 #ifdef DEBUG
-kprintf("method %d\n", msg->MethodID);
+kprintf("method %lx\n", msg->MethodID);
 #endif
 
 	switch (msg->MethodID) {
@@ -195,7 +195,10 @@ static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 	UBYTE *tempmem;
 	struct flicinstdata *prevframe;
 
-//IExec->DebugPrintF("convertico\n");
+#ifdef DEBUG
+kprintf("[flic.dt] converting file\n");
+#endif
+
 	prevframe = INST_DATA(cl,o);
 
 	if(file)
@@ -210,11 +213,18 @@ static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 	if(adf)
 	{
 		framereq = adf->alf_TimeStamp; //+1;
+
+#ifdef DEBUG
+kprintf("[flic.dt] frame %ld\n",framereq);
+#endif
 //IExec->DebugPrintF("%ld\n",framereq);
 	}
 
 	framereq++; // starts at 0, we start at 1
 
+#ifdef DEBUG
+kprintf("[flic.dt] seeking frame %ld\n",framereq);
+#endif
 //IExec->DebugPrintF("Seeking frame %ld\n",framereq);
 
 	Seek(file,0,OFFSET_BEGINNING);
@@ -364,6 +374,10 @@ static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 			//	size = size - size2;
 #ifdef __amigaos4__
 				DebugPrintF("[flic.datatype] CHUNK %ld SIZE %ld\n",read_le16(&datachunk.type),size2);
+#else
+#ifdef DEBUG
+kprintf("[flic.datatype] CHUNK %ld SIZE %ld\n",read_le16(&datachunk.type),size2);
+#endif
 #endif
 				switch(read_le16(&datachunk.type))
 				{
@@ -688,11 +702,19 @@ static int32 ConvertFLIC (Class *cl, Object *o, BPTR file,struct adtFrame *adf)
 					default:
 #ifdef __amigaos4__
 						DebugPrintF("[flic.datatype] Unsupported chunk %ld\n",read_le16(&datachunk.type));
+#else
+#ifdef DEBUG
+kprintf("[flic.datatype] Unsupported chunk %ld\n",read_le16(&datachunk.type));
+#endif
 #endif
 						if(read_le16(&datachunk.type)>50)
 						{
 #ifdef __amigaos4__
 							DebugPrintF("[flic.datatype] FATAL ERROR\n");
+#else
+#ifdef DEBUG
+kprintf("[flic.datatype] FATAL ERROR\n");
+#endif
 #endif
 							return 0;
 						}
@@ -813,15 +835,20 @@ static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	filename = (char *)GetTagData(DTA_Name, (uint32)"Untitled", tags);
 #endif
 
-	ret = GetDTAttrsA(o, gdtatags);
+	ret = GetDTAttrs(o,
+					DTA_Handle,	(ULONG)&file,
+					DTA_SourceType,	(ULONG)&srctype,
+//					DTA_Name, (ULONG)&filename,
+					TAG_DONE);
 
 		SetDTAttrs(o, NULL, NULL,
 				DTA_ObjName, FilePart(filename),
 				TAG_DONE);
 
 #ifdef DEBUG
-kprintf("file = %s\n", file);
-kprintf("srctype = %d\n", srctype);
+kprintf("ret = %ld\n", ret);
+kprintf("file = %lx\n", file);
+kprintf("srctype = %ld\n", srctype);
 #endif
 
 	/* Do we have everything we need? */
