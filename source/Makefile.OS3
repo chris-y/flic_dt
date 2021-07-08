@@ -3,12 +3,12 @@ CC   := vc +aos68k -c99
 CP  := copy
 RM   := rm -f
 
-CFLAGS := -O3 -cpu=68020 -Iinclude -Ivincludeos3: -D__NOLIBBASE__
+CFLAGS := -O3 -cpu=68020 -Iinclude -Ivincludeos3: -D__NOLIBBASE__ -DDEBUG
 # -gstabs
 LINK := -nostdlib
 
 # Additional linker libraries
-LIBS := -lamiga
+LIBS := -lamiga -ldebug
 
 # Name of the "thing" to build
 TARGET  := flic.datatype

@@ -67,10 +67,16 @@ struct ClassBase *libOpen(REG(a6, struct ClassBase *libBase), REG(d0, uint32 ver
     struct ClassBase *libBase = (struct ClassBase *)Self->Data.LibBase; 
 #endif
 
+#ifdef DEBUG
+kprintf("opening flic.datatype, version=%d\n",version);
+#endif
+
+#if 0 // this is a datatype - version is irrelevant anyway
     if (version > VERSION)
     {
         return NULL;
     }
+#endif
 
     /* Add any specific open code here 
        Return 0 before incrementing OpenCnt to fail opening */
@@ -78,6 +84,12 @@ struct ClassBase *libOpen(REG(a6, struct ClassBase *libBase), REG(d0, uint32 ver
 
     /* Add up the open count */
     libBase->libNode.lib_OpenCnt++;
+	libBase->libNode.lib_Flags &= ~LIBF_DELEXP;
+
+#ifdef DEBUG
+kprintf("opened flic.datatype, count=%d\n",libBase->libNode.lib_OpenCnt);
+#endif
+
     return libBase;
 
 }
@@ -99,7 +111,10 @@ BPTR libClose (REG(a6, struct ClassBase *libBase))
     /* Make the close count */
     ((struct Library *)libBase)->lib_OpenCnt--;
 
-	#ifndef __amigaos4__
+#ifdef DEBUG
+kprintf("closed flic.datatype, count=%d\n",libBase->libNode.lib_OpenCnt);
+#endif
+
 	if (libBase->libNode.lib_OpenCnt) {
 		return 0;
 	}
@@ -109,7 +124,6 @@ BPTR libClose (REG(a6, struct ClassBase *libBase))
 	} else {
 		return 0;
 	}
-#endif
 
     return 0;
 }
@@ -153,6 +167,11 @@ BPTR libExpunge (REG(a6, struct ClassBase *libBase))
         result = (BPTR)NULL;
         libBase->libNode.lib_Flags |= LIBF_DELEXP;
     }
+
+#ifdef DEBUG
+kprintf("expunged flic.datatype, result=%d\n",result);
+#endif
+
     return result;
 }
 
@@ -186,6 +205,9 @@ struct ClassBase *libInit (REG(d0, struct ClassBase *libBase), REG(a0, BPTR segl
 	if (openDTLibs(libBase)) {
 		libBase->DTClass = initDTClass(libBase);
 		if (libBase->DTClass) {
+#ifdef DEBUG
+kprintf("inited flic.datatype\n");
+#endif
 			return libBase;
 		}
 		closeDTLibs(libBase);
@@ -324,6 +346,9 @@ Class *_DTClass_ObtainEngine(REG(a6, struct ClassBase *libBase))
 {
 #ifdef __amigaos4__
 	struct ClassBase *libBase = (struct ClassBase *)Self->Data.LibBase;
+#endif
+#ifdef DEBUG
+kprintf("[flic.datatype] obtainengine %x\n",libBase->DTClass);
 #endif
 	return libBase->DTClass;
 }

@@ -19,6 +19,9 @@
 #include <datatypes/animationclass.h>
 
 #ifndef __amigaos4__
+#ifdef DEBUG
+#include <clib/debug_protos.h>
+#endif
 #include "SDI_compiler.h"
 #include <stdint.h>
 #define uint16 uint16_t

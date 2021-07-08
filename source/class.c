@@ -29,16 +29,30 @@ Class *initDTClass (struct ClassBase *libBase)
 	struct ExecIFace *IExec = libBase->IExec;
 	struct IntuitionIFace *IIntuition = libBase->IIntuition;
 #endif
-	Class *cl;
+	Class *cl = NULL;
+
+#ifdef DEBUG
+kprintf("opening animation.datatype\n");
+#endif
+
 	libBase->SuperClassLib = OpenLibrary("datatypes/animation.datatype", 39);
 	if (libBase->SuperClassLib) {
-		cl = MakeClass(libBase->libNode.lib_Node.ln_Name, ANIMATIONDTCLASS, NULL, sizeof(struct flicinstdata), 0);
+#ifdef DEBUG
+kprintf("opened animation.datatype\n");
+#endif
+		cl = MakeClass((UBYTE *)libBase->libNode.lib_Node.ln_Name, ANIMATIONDTCLASS, NULL, sizeof(struct flicinstdata), 0);
 		if (cl) {
+#ifdef DEBUG
+kprintf("made class %s\n", libBase->libNode.lib_Node.ln_Name);
+#endif
 			cl->cl_Dispatcher.h_Entry = (HOOKFUNC)ClassDispatch;
 			cl->cl_UserData = (uint32)libBase;
 			AddClass(cl);
 		} else {
 			CloseLibrary(libBase->SuperClassLib);
+#ifdef DEBUG
+kprintf("failed makeclass\n");
+#endif
 		}
 	}
 	return cl;
@@ -75,6 +89,10 @@ static uint32 ClassDispatch(REG(a0, Class *cl), REG(a2, Object *o), REG(a1, Msg 
 	struct IntuitionIFace *IIntuition = libBase->IIntuition;
 #endif
 	uint32 ret;
+
+#ifdef DEBUG
+kprintf("method %d\n", msg->MethodID);
+#endif
 
 	switch (msg->MethodID) {
 
@@ -781,28 +799,40 @@ static int32 GetFLIC (Class *cl, Object *o, struct TagItem *tags) {
 	int32 srctype;
 	int32 error = 0; //ERROR_OBJECT_NOT_FOUND;
 	BPTR file = (BPTR)0;
+	ULONG ret = 0;
+	struct TagItem gdtatags[] = {
+		{DTA_Handle,			(ULONG)&file},
+		{DTA_SourceType,		(ULONG)&srctype},
+#ifdef __amigaos4__
+		{DTA_Name,			(ULONG)&filename},
+#endif
+		{TAG_DONE}
+	};
 
 #ifndef __amigaos4__
 	filename = (char *)GetTagData(DTA_Name, (uint32)"Untitled", tags);
 #endif
 
-	GetDTAttrs(o,
-		DTA_Handle,			&file,
-		DTA_SourceType,		&srctype,
-#ifdef __amigaos4__
-		DTA_Name,			&filename,
-#endif
-		TAG_END);
+	ret = GetDTAttrsA(o, gdtatags);
 
 		SetDTAttrs(o, NULL, NULL,
 				DTA_ObjName, FilePart(filename),
 				TAG_DONE);
 
+#ifdef DEBUG
+kprintf("file = %s\n", file);
+kprintf("srctype = %d\n", srctype);
+#endif
+
 	/* Do we have everything we need? */
-	if (file && srctype == DTST_FILE) {
+	if (file && (srctype == DTST_FILE)) {
 
 		error = ConvertFLIC(cl, o, file,NULL); //, whichpic, numpics);
 	}
+
+#ifdef DEBUG
+kprintf("error = %d\n", error);
+#endif
 
 	return error;
 }
