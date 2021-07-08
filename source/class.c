@@ -290,7 +290,7 @@ kprintf("[flic.dt] seeking frame %ld\n",framereq);
 	tempbm = AllocBitMap(read_le16(&head.width),1,read_le16(&head.depth),0,NULL);
 	temprp.BitMap = tempbm;
 
-	tempmem = AllocVec(read_le16(&head.width),MEMF_ANY);
+	tempmem = AllocVec(read_le16(&head.width),MEMF_CHIP);
 
 /*
 	ocmap=cmap;
